@@ -7,4 +7,10 @@ A visualization of a twist on the usual binary search!
 
 Written in Python with a homemade terminal frame
 
+---
+
+Currently a work in progress... 
+
+Sample: 
+
 ![Terminal](./sample.png)
