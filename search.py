@@ -16,11 +16,11 @@ def print_frame(nums, start, end, points):
     else:
         for i in range(0, start):
             output += "   "
-        output += "  >"
+        output += "  V"
         for i in range(start, end - 1):
             output += "---"
-        output += "--<"
-        print(output)  
+        output += "--V"
+        print(output)
     output = ''
     for i in range(len(nums)):
         output += '--|'
@@ -30,6 +30,15 @@ def print_frame(nums, start, end, points):
     for i in range(len(nums)):
         output += '{:3d}'.format(nums[i])
     print(output)
+    time.sleep(1)
+
+def print_success(guess, index):
+    print("----------")
+    print("Found " + str(guess) + " at index " + str(index))
+
+def print_failure(guess):
+    print("----------")
+    print("Value " + str(guess) + " not found!")
 
 # Input an integer value between 10-30
 length = 0
@@ -95,61 +104,77 @@ start = 0
 end = length - 1
 found = False
 print("Searching for the number {}...".format(guess))
-
-while (end - start > 2):
+        
+while (end - start > 2):    
+    
+    print_frame(nums, start, end, False)
     
     if (guess == nums[start]):
         # Found at start
         found = True
-        print_frame(nums, start, end, True)
-        time.sleep(1)
-        print("Found " + str(guess) + " at index " + str(start))
+        print_frame(nums, start, start, True)
+        print_success(guess, start)
         break
     if (guess == nums[end]):
-        found = True
-        print_frame(nums, start, end, True)
-        time.sleep(1)
         # Found at end
-        print("Found " + str(guess) + " at index " + str(end))
+        found = True
+        print_frame(nums, end, end, True)
+        print_success(guess, end)
         break
 
     diff = end  - start
-    print("Diff: " + str(diff) + ", Start: " + str(start) + ", End: " + str(end))
-    print_frame(nums, start, end, False)
-    r_mark = int(start + ((diff * 2) / 3))
+    
+    # DEBUG - REMOVE
+    print("Diff: " + str(diff) + ", Start: " + str(start) + ", End: " + str(end))\
+    
     l_mark = int(start + (diff / 3))
+    r_mark = int(start + ((diff / 3) * 2))
     if (diff % 3 > 1):
         r_mark += 1
+        
+    # DEBUG - REMOVE
     print("Diff: " + str(diff) + ", Start: " + str(start) + ", End: " + str(end))
+    
     print_frame(nums, l_mark, r_mark, True)
     if (guess < nums[l_mark]):
         # Found before left marker
-        start = start + 1
-        end = l_mark - 1
+        if (l_mark - start < 2):
+            end = l_mark
+        else: 
+            start = start + 1
+            end = l_mark - 1
+        
     elif (guess > nums[r_mark]):
         # Found after right marker
-        start = r_mark + 1
-        end = end - 1
+        if (end - r_mark < 2):
+            start = r_mark
+        else: 
+            start = r_mark + 1
+            end = end - 1
     else:
         # Found between two markers, inclusive
         start = l_mark
         end = r_mark
         
 if (not found):
-    print("failed!!")
+    # DEBUG - REMOVE
     print("Diff: " + str(diff) + ", Start: " + str(start) + ", End: " + str(end))
-    
-    print_frame(nums, start, end, True)
+
+    # Search area is narrower than 4 indices
+    print_frame(nums, start, end, False)
     for i in range(start, end + 1):
         if (nums[i] == guess):
             print_frame(nums, i, i, True)
+            print_success(guess, i)
             found = True
             break
 
 if (not found):
+    # DEBUG - REMOVE
     print("Diff: " + str(diff) + ", Start: " + str(start) + ", End: " + str(end))
-    print_frame(nums, start - 1, end + 1, False)
-    print("Value not found!!!")
+
+    # Guess value not found
+    print_failure(guess)
             
 time.sleep(1)
 input("Press any key to terminate the program")
