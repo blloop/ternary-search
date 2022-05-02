@@ -17,3 +17,5 @@ Written in Python with a homemade terminal frame
 ---
 
 Sample of ternary search: 
+
+https://user-images.githubusercontent.com/42186044/166316438-34cc2128-2b8c-4a45-bfb0-f27475d2d239.mp4
